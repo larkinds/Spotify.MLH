@@ -1,6 +1,30 @@
-# spotifymlh README
+# spotifymlh
 
 This is the README for your extension "spotifymlh". After writing up a brief description, we recommend including the following sections.
+
+## Development Setup
+1. Sign up for a Spotify account (a free account is ok for development, but Premium is required for testing)
+1. Log in to [Spotify for Developers](https://developer.spotify.com/dashboard/)
+1. Create an app
+1. Open the settings for your app and add `http://localhost:8350/spotify-callback` as a redirect URI
+1. Clone the repository
+   ```shell
+   git clone git@github.com:larkinds/Spotify.MLH.git
+   ```
+1. Open VS Code
+   ```shell
+   cd Spotify.MLH && code .
+   ```
+1. Duplicate `src/secrets.ts.txt` and rename it to `src/secrets.ts`
+   ```shell
+   cp src/secrets.ts.txt src/secrets.ts
+   ```
+1. Set `clientId` and `clientSecret` in `secrets.ts` to the values found in your developer app settings
+1. Install extension dependencies
+   ```shell
+   npm install
+   ```
+1. Run the extension by hitting <kbd>F5</kbd> or clicking the `Run Extension` button at the bottom of your screen
 
 ## Features
 
