@@ -1,14 +1,24 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { clientId, clientSecret } from './secrets';
+const crypto = require('crypto');
+const express = require('express');
+const SpotifyWebApi = require('spotify-web-api-node');
+
+// Auth config
+const PATH = '/spotify-callback';
+const PORT = 8350;
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "spotifymlh" is now active!');
+	let spotify = new SpotifyWebApi({
+		redirectUri: `http://localhost:${PORT}${PATH}`,
+		clientId,
+		clientSecret
+	});
+	spotifyAuthentication(spotify);
 
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.play", () => {
@@ -16,10 +26,57 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.pause", () => {
-		//logic for pause on spotify goes here
+		// TODO: handle errors etc., see documentation
+		vscode.window.showInformationMessage('Attempting to pause...');
+		spotify.pause();
 	}));
 
 }
 
 // this method is called when your extension is deactivated
 export function deactivate() {}
+
+function spotifyAuthentication(spotify: typeof SpotifyWebApi) {
+	const state = crypto.randomBytes(8).toString('base64');
+	const authUrl = spotify.createAuthorizeURL([
+		'user-library-modify',
+		'user-modify-playback-state',
+		'user-read-playback-state',
+		'user-read-recently-played'
+	], state);
+	
+	let code = null;
+	
+	const app = express();
+	let server = null;
+	app.get(PATH, (req, res) => {
+		if (req.query.error) {
+			vscode.window.showErrorMessage(req.query.error);
+			// server.close();
+		} else if (!req.query.code) {
+			vscode.window.showErrorMessage("Spotify did not successfully authenticate (missing 'code' property in response).");
+			res.send("Spotify did not successfully authenticate (missing 'code' property in response).");
+			// server.close();
+		} else if (req.query.state !== state) {
+			vscode.window.showErrorMessage('Possible CSRF attack: received different response state from request state.');
+			res.send('Possible CSRF attack: received different response state from request state.');
+			// server.close();
+		} else {
+			code = req.query.code;
+			spotify.authorizationCodeGrant(code).then(
+				data => {
+					spotify.setAccessToken(data.body['access_token']);
+    				spotify.setRefreshToken(data.body['refresh_token']);
+				},
+				err => {
+					vscode.window.showErrorMessage(`Error exchanging authorization code for access token: ${err}`);
+				}
+			);
+			res.send('You may now close this tab.');
+			vscode.window.showInformationMessage("Successfully authenticated with Spotify.");
+			server.close();
+		}
+	});
+	server = app.listen(PORT);
+	vscode.env.openExternal(authUrl);
+}
