@@ -10,17 +10,12 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:spotifymlh.helloWorld",
 		"onCommand:spotifymlh.play",
 		"onCommand:spotifymlh.pause"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
 		"commands": [
-			{
-				"command": "spotifymlh.helloWorld",
-				"title": "Hello World"
-			},
 			{
 				"command": "spotifymlh.play",
 				"category": "SpotifyMLH:",
