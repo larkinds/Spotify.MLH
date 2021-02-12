@@ -18,12 +18,12 @@
 		"commands": [
 			{
 				"command": "spotifymlh.play",
-				"category": "SpotifyMLH:",
+				"category": "Spotify",
 				"title": "Play"
 			},
 			{
 				"command": "spotifymlh.pause",
-				"category": "SpotifyMLH:",
+				"category": "Spotify",
 				"title": "Pause"
 			}
 		]
