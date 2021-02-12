@@ -10,54 +10,108 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:spotifymlh.helloWorld",
-		"onCommand:spotifymlh.play",
-		"onCommand:spotifymlh.pause"
+		"onStartupFinished"
 	],
-	"main": "./dist/extension.js",
+	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "spotifymlh.helloWorld",
-				"title": "Hello World"
-			},
-			{
 				"command": "spotifymlh.play",
-				"category": "SpotifyMLH:",
+				"category": "Spotify",
 				"title": "Play"
 			},
 			{
 				"command": "spotifymlh.pause",
-				"category": "SpotifyMLH:",
+				"category": "Spotify",
 				"title": "Pause"
 			}
-		]
+		],
+		"views": {
+			"spotify": [
+				{
+					"id": "spotify-queue",
+					"name": "Queue",
+					"icon": "media/icon.svg",
+					"visibility": "collapsed"
+				},
+				{
+					"id": "spotify-personalized-playlists",
+					"name": "Made For You",
+					"icon": "media/icon.svg",
+					"visibility": "collapsed"
+				},
+				{
+					"id": "spotify-recent",
+					"name": "Recently Played",
+					"icon": "media/icon.svg",
+					"visibility": "collapsed"
+				},
+				{
+					"id": "spotify-likes",
+					"name": "Liked Songs",
+					"icon": "media/icon.svg",
+					"visibility": "collapsed"
+				},
+				{
+					"id": "spotify-albums",
+					"name": "Albums",
+					"icon": "media/icon.svg",
+					"visibility": "collapsed"
+				},
+				{
+					"id": "spotify-artists",
+					"name": "Artists",
+					"icon": "media/icon.svg",
+					"visibility": "collapsed"
+				},
+				{
+					"id": "spotify-podcasts",
+					"name": "Podcasts",
+					"icon": "media/icon.svg",
+					"visibility": "collapsed"
+				},
+				{
+					"id": "spotify-playlists",
+					"name": "Playlists",
+					"icon": "media/icon.svg",
+					"visibility": "collapsed"
+				}
+			]
+		},
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "spotify",
+					"title": "Spotify",
+					"icon": "media/icon.svg"
+				}
+			]
+		}
 	},
 	"scripts": {
-		"vscode:prepublish": "npm run package",
-		"compile": "webpack",
-		"watch": "webpack --watch",
-		"package": "webpack --mode production --devtool hidden-source-map",
-		"test-compile": "tsc -p ./",
-		"test-watch": "tsc -watch -p ./",
-		"pretest": "npm run test-compile && npm run lint",
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
 		"lint": "eslint src --ext ts",
 		"test": "node ./out/test/runTest.js"
 	},
 	"devDependencies": {
-		"@types/vscode": "^1.53.0",
+		"@types/express": "^4.17.11",
 		"@types/glob": "^7.1.3",
 		"@types/mocha": "^8.0.4",
 		"@types/node": "^12.11.7",
-		"eslint": "^7.19.0",
+		"@types/vscode": "^1.53.0",
 		"@typescript-eslint/eslint-plugin": "^4.14.1",
 		"@typescript-eslint/parser": "^4.14.1",
+		"eslint": "^7.19.0",
 		"glob": "^7.1.6",
 		"mocha": "^8.2.1",
 		"typescript": "^4.1.3",
-		"vscode-test": "^1.5.0",
-		"ts-loader": "^8.0.14",
-		"webpack": "^5.19.0",
-		"webpack-cli": "^4.4.0"
+		"vscode-test": "^1.5.0"
+	},
+	"dependencies": {
+		"express": "^4.17.1",
+		"spotify-web-api-node": "^5.0.2"
 	}
 }
