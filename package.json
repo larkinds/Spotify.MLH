@@ -26,7 +26,68 @@
 				"category": "Spotify",
 				"title": "Pause"
 			}
-		]
+		],
+		"views": {
+			"spotify": [
+				{
+					"id": "spotify-queue",
+					"name": "Queue",
+					"icon": "media/icon.svg",
+					"visibility": "collapsed"
+				},
+				{
+					"id": "spotify-personalized-playlists",
+					"name": "Made For You",
+					"icon": "media/icon.svg",
+					"visibility": "collapsed"
+				},
+				{
+					"id": "spotify-recent",
+					"name": "Recently Played",
+					"icon": "media/icon.svg",
+					"visibility": "collapsed"
+				},
+				{
+					"id": "spotify-likes",
+					"name": "Liked Songs",
+					"icon": "media/icon.svg",
+					"visibility": "collapsed"
+				},
+				{
+					"id": "spotify-albums",
+					"name": "Albums",
+					"icon": "media/icon.svg",
+					"visibility": "collapsed"
+				},
+				{
+					"id": "spotify-artists",
+					"name": "Artists",
+					"icon": "media/icon.svg",
+					"visibility": "collapsed"
+				},
+				{
+					"id": "spotify-podcasts",
+					"name": "Podcasts",
+					"icon": "media/icon.svg",
+					"visibility": "collapsed"
+				},
+				{
+					"id": "spotify-playlists",
+					"name": "Playlists",
+					"icon": "media/icon.svg",
+					"visibility": "collapsed"
+				}
+			]
+		},
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "spotify",
+					"title": "Spotify",
+					"icon": "media/icon.svg"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
