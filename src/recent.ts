@@ -10,7 +10,6 @@ export class RecentProvider implements vscode.TreeDataProvider<Track> {
         }
         return Promise.resolve(this.spotify.getMyRecentlyPlayedTracks({limit: 50}).then(
             (data: any) => {
-                console.log(data.body.items);
                 return Promise.resolve(data.body.items.map((x: any) => new Track(x.track.artists, x.track.name)));
             },
             (error: any) => {
