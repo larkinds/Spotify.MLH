@@ -1,10 +1,11 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
+import * as crypto from 'crypto';
 import * as vscode from 'vscode';
-import { clientId, clientSecret } from './secrets';
-const crypto = require('crypto');
 const express = require('express');
 const SpotifyWebApi = require('spotify-web-api-node');
+import { RecentProvider } from './recent';
+import { clientId, clientSecret } from './secrets';
 
 // Auth config
 const PATH = '/spotify-callback';
@@ -31,6 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
 		spotify.pause();
 	}));
 
+	vscode.window.registerTreeDataProvider('spotify-recent', new RecentProvider(spotify));
 }
 
 // this method is called when your extension is deactivated
