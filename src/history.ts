@@ -1,8 +1,9 @@
+import SpotifyWebApi = require('spotify-web-api-node');
 import * as vscode from 'vscode';
 import Track from './track';
 
 export class HistoryProvider implements vscode.TreeDataProvider<Track> {
-    constructor(private spotify: any) {}
+    constructor(private spotify: SpotifyWebApi) {}
 
     getChildren(element?: Track): Thenable<Track[]> {
         if (element) {
