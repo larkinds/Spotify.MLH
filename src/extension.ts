@@ -6,19 +6,17 @@ const crypto = require('crypto');
 const express = require('express');
 const SpotifyWebApi = require('spotify-web-api-node');
 
+import {init} from './statusBar'
+
 // Auth config
 const PATH = '/spotify-callback';
 const PORT = 8350;
 
-let pauseItem: vscode.StatusBarItem;
-let playItem: vscode.StatusBarItem;
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-    const pauseCommand = 'spotifymlh.pause';
-    const playCommand = 'spotifymlh.pause';
 
 	let spotify = new SpotifyWebApi({
 		redirectUri: `http://localhost:${PORT}${PATH}`,
@@ -27,17 +25,13 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 	spotifyAuthentication(spotify);
 
-    pauseItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-    playItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-    pauseItem.command = pauseCommand;
-    playItem.command = playCommand;
-    context.subscriptions.push(pauseItem);
-    context.subscriptions.push(playItem);
-
-    updateStatusBarItem();
+    // Initialise status bar stuff
+    init(context)
 
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.play", () => {
+        vscode.window.showInformationMessage('Attempting to play...');
+		spotify.play();
 		//logic for play on spotify goes here
 	}));
 
@@ -47,13 +41,6 @@ export function activate(context: vscode.ExtensionContext) {
 		spotify.pause();
 	}));
 
-}
-
-function updateStatusBarItem(): void {
-    pauseItem.text = `$(debug-pause)`;
-    playItem.text = `$(debug-start)`;
-    pauseItem.show()
-    playItem.show()
 }
 
 // this method is called when your extension is deactivated
