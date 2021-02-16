@@ -6,6 +6,7 @@ const express = require('express');
 const SpotifyWebApi = require('spotify-web-api-node');
 import { RecentProvider } from './recent';
 import { clientId, clientSecret } from './secrets';
+import Track from './track';
 
 // Auth config
 const PATH = '/spotify-callback';
@@ -30,6 +31,16 @@ export function activate(context: vscode.ExtensionContext) {
 		// TODO: handle errors etc., see documentation
 		vscode.window.showInformationMessage('Attempting to pause...');
 		spotify.pause();
+	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.track.play", (track: Track) => {
+		// Spotify Web API doesn't currently have a way to start playback fresh from a track, so this is a hack
+		spotify.addToQueue(track.uri)
+			.then(() => spotify.skipToNext());
+	}));
+	
+	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.track.queue", (track: Track) => {
+		spotify.addToQueue(track.uri);
 	}));
 
 	vscode.window.registerTreeDataProvider('spotify-recent', new RecentProvider(spotify));

@@ -8,12 +8,15 @@ import * as vscode from 'vscode';
 export default class Track extends vscode.TreeItem {
     artists: any[];
     name: string;
+    uri: string;
+    
     constructor(
-        private readonly track: any
+        public readonly data: any
     ) {
-        super(track.name);
-        this.name = track.name;
-        this.artists = track.artists;
+        super(data.name);
+        this.name = data.name;
+        this.artists = data.artists;
+        this.uri = data.uri;
 
         this.description = this.artists.map(x => x.name).join(', ');
         this.tooltip = new vscode.MarkdownString(`**${this.name}**  \n${this.artists.map(x => x.name).join(', ')}`);
