@@ -4,7 +4,7 @@ import * as crypto from 'crypto';
 import * as vscode from 'vscode';
 const express = require('express');
 const SpotifyWebApi = require('spotify-web-api-node');
-import { RecentProvider } from './recent';
+import { HistoryProvider } from './history';
 import { clientId, clientSecret } from './secrets';
 import Track from './track';
 
@@ -43,7 +43,7 @@ export function activate(context: vscode.ExtensionContext) {
 		spotify.addToQueue(track.uri);
 	}));
 
-	vscode.window.registerTreeDataProvider('spotify-recent', new RecentProvider(spotify));
+	vscode.window.registerTreeDataProvider('spotify-history', new HistoryProvider(spotify));
 }
 
 // this method is called when your extension is deactivated

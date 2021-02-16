@@ -42,12 +42,12 @@
 			"view/item/context": [
 				{
 					"command": "spotifymlh.track.play",
-					"when": "view == spotify-recent",
+					"when": "view == spotify-history",
 					"group": "inline"
 				},
 				{
 					"command": "spotifymlh.track.queue",
-					"when": "view == spotify-recent",
+					"when": "view == spotify-history",
 					"group": "inline"
 				}
 			]
@@ -67,8 +67,8 @@
 					"visibility": "collapsed"
 				},
 				{
-					"id": "spotify-recent",
-					"name": "Recently Played",
+					"id": "spotify-history",
+					"name": "History",
 					"icon": "media/icon.svg",
 					"visibility": "collapsed"
 				},

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import Track from './track';
 
-export class RecentProvider implements vscode.TreeDataProvider<Track> {
+export class HistoryProvider implements vscode.TreeDataProvider<Track> {
     constructor(private spotify: any) {}
 
     getChildren(element?: Track): Thenable<Track[]> {
