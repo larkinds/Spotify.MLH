@@ -1,10 +1,5 @@
 import * as vscode from "vscode";
 
-let pauseItem: vscode.StatusBarItem;
-let playItem: vscode.StatusBarItem;
-const pauseCommand = "spotifymlh.pause";
-const playCommand = "spotifymlh.play";
-
 const data = {
     pauseItem: {
         command: "spotifymlh.pause",
