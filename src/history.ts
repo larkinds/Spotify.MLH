@@ -5,7 +5,6 @@ export class HistoryProvider implements vscode.TreeDataProvider<Track> {
     constructor(private spotify: any) {}
 
     getChildren(element?: Track): Thenable<Track[]> {
-        // TODO: implement
         if (element) {
             return Promise.resolve([]);
         }
