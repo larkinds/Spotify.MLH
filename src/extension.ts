@@ -1,10 +1,13 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as crypto from 'crypto';
+import { application } from 'express';
+import { access } from 'fs';
 import * as vscode from 'vscode';
 const express = require('express');
 const SpotifyWebApi = require('spotify-web-api-node');
 import { RecentProvider } from './recent';
+import {PlaylistsProvider} from './playlists';
 import { clientId, clientSecret } from './secrets';
 
 // Auth config
@@ -19,8 +22,10 @@ export function activate(context: vscode.ExtensionContext) {
 		clientId,
 		clientSecret
 	});
+
 	spotifyAuthentication(spotify);
 
+	// console.log(spotify.getPlaylists('me'));
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.play", () => {
 		//logic for play on spotify goes here
@@ -33,10 +38,14 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 
 	vscode.window.registerTreeDataProvider('spotify-recent', new RecentProvider(spotify));
+	vscode.window.registerTreeDataProvider('spotify-playlists', new PlaylistsProvider(spotify));
 }
 
 // this method is called when your extension is deactivated
 export function deactivate() {}
+
+//do I need to convert this from JSON?
+let accessToken;
 
 function spotifyAuthentication(spotify: typeof SpotifyWebApi) {
 	const state = crypto.randomBytes(8).toString('base64');
@@ -51,7 +60,7 @@ function spotifyAuthentication(spotify: typeof SpotifyWebApi) {
 	
 	const app = express();
 	let server = null;
-	app.get(PATH, (req, res) => {
+	app.get(PATH, (req, res, next) => {
 		if (req.query.error) {
 			vscode.window.showErrorMessage(req.query.error);
 			// server.close();
@@ -67,6 +76,7 @@ function spotifyAuthentication(spotify: typeof SpotifyWebApi) {
 			code = req.query.code;
 			spotify.authorizationCodeGrant(code).then(
 				data => {
+					accessToken = data.body['access_token'];
 					spotify.setAccessToken(data.body['access_token']);
     				spotify.setRefreshToken(data.body['refresh_token']);
 				},
@@ -74,11 +84,14 @@ function spotifyAuthentication(spotify: typeof SpotifyWebApi) {
 					vscode.window.showErrorMessage(`Error exchanging authorization code for access token: ${err}`);
 				}
 			);
+			
 			res.send('You may now close this tab.');
 			vscode.window.showInformationMessage("Successfully authenticated with Spotify.");
 			server.close();
 		}
 	});
+
+
 	server = app.listen(PORT);
 	vscode.env.openExternal(authUrl);
 }
