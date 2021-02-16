@@ -24,18 +24,6 @@
 				"command": "spotifymlh.pause",
 				"category": "Spotify",
 				"title": "Pause"
-			},
-			{
-				"command": "spotifymlh.track.play",
-				"category": "Spotify",
-				"title": "Play",
-				"icon": "$(play)"
-			},
-			{
-				"command": "spotifymlh.track.queue",
-				"category": "Spotify",
-				"title": "Add track to queue",
-				"icon": "$(add)"
 			}
 		],
 		"menus": {
