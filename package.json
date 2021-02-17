@@ -16,6 +16,11 @@
 	"contributes": {
 		"commands": [
 			{
+				"command": "spotifymlh.history.newer",
+				"title": "Load newer tracks",
+				"icon": "$(refresh)"
+			},
+			{
 				"command": "spotifymlh.play",
 				"category": "Spotify",
 				"title": "Play"
@@ -49,6 +54,13 @@
 					"command": "spotifymlh.track.queue",
 					"when": "view == spotify-history",
 					"group": "inline"
+				}
+			],
+			"view/title": [
+				{
+					"command": "spotifymlh.history.newer",
+					"when": "view == spotify-history",
+					"group": "navigation"
 				}
 			]
 		},

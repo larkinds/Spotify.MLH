@@ -23,6 +23,11 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 	spotifyAuthentication(spotify);
 
+	const historyProvider = new HistoryProvider(spotify);
+	vscode.window.registerTreeDataProvider('spotify-history', historyProvider);
+	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.history.newer", () => {
+		historyProvider.refresh();
+	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.play", () => {
 		//logic for play on spotify goes here
@@ -43,8 +48,6 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.track.queue", (track: Track) => {
 		spotify.addToQueue(track.uri);
 	}));
-
-	vscode.window.registerTreeDataProvider('spotify-history', new HistoryProvider(spotify));
 }
 
 // this method is called when your extension is deactivated
