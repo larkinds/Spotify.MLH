@@ -23,11 +23,8 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 	spotifyAuthentication(spotify);
 
-	const historyProvider = new HistoryProvider(spotify);
+	const historyProvider = new HistoryProvider(spotify, context);
 	vscode.window.registerTreeDataProvider('spotify-history', historyProvider);
-	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.history.newer", () => {
-		historyProvider.loadNewTracks();
-	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.play", () => {
 		//logic for play on spotify goes here

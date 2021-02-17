@@ -8,7 +8,11 @@ export class HistoryProvider implements vscode.TreeDataProvider<Track> {
     private after?: number = undefined;
     public tracks: Track[] = [];
     
-    constructor(private spotify: SpotifyWebApi) {}
+    constructor(private spotify: SpotifyWebApi, private readonly context: vscode.ExtensionContext) {
+        context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.history.newer", () => {
+            this.loadNewTracks();
+        }));
+    }
 
     getChildren(element?: Track): Thenable<Track[]> {
         if (element) {
