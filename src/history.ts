@@ -15,30 +15,30 @@ export class HistoryProvider implements vscode.TreeDataProvider<Track> {
             // Tracks do not have children
             return Promise.resolve([]);
         }
-        
-        return Promise.resolve(this.spotify.getMyRecentlyPlayedTracks({
-            after: this.after,
-            limit: 50
-        }).then(
-            (data: any) => {
-                if (data.body.items.length === 0) {
-                    vscode.window.showInformationMessage("Spotify didn't return any newer tracks.");
-                    return; // Skip to the next promise in the chain
-                }
-                this.after = data.body.cursors.after;
-                this.tracks = data.body.items.map((x: any) => new Track(x.track)).concat(this.tracks);
-            },
-            (error: any) => {
-                vscode.window.showErrorMessage(error);
-            }
-        ).then(() => { return Promise.resolve(this.tracks); }));
+
+        if (this.tracks.length === 0) {
+            this.loadNewTracks();
+        }
+
+        return Promise.resolve(this.tracks);
     }
 
     getTreeItem(element: Track): vscode.TreeItem {
 		return element;
 	}
 
-    refresh(): void {
-        this._onDidChangeTreeData.fire();
+    loadNewTracks() {
+        return Promise.resolve(this.spotify.getMyRecentlyPlayedTracks({ after: this.after, limit: 50 }).then(
+            data => {
+                if (data.body.items.length === 0) {
+                    vscode.window.showInformationMessage("Spotify didn't return any newer tracks.");
+                    return; // Skip to the next promise in the chain
+                }
+                this.after = Number(data.body.cursors.after);
+                this.tracks = data.body.items.map((x: any) => new Track(x.track)).concat(this.tracks);
+                this._onDidChangeTreeData.fire(); // Tell VS Code that the TreeItems have changed
+            },
+            error => vscode.window.showErrorMessage(error)
+        ));
     }
 }
