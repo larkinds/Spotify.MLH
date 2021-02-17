@@ -42,6 +42,12 @@
 			}
 		],
 		"menus": {
+			"commandPalette": [
+				{
+					"command": "spotifymlh.history.newer",
+					"when": "false"
+				}
+			],
 			"view/item/context": [
 				{
 					"command": "spotifymlh.track.play",
