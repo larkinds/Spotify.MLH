@@ -32,14 +32,12 @@
 			},
 			{
 				"command": "spotifymlh.track.play",
-				"category": "Spotify",
 				"title": "Play",
 				"icon": "$(play)"
 			},
 			{
 				"command": "spotifymlh.track.queue",
-				"category": "Spotify",
-				"title": "Add track to queue",
+				"title": "Add to Queue",
 				"icon": "$(add)"
 			}
 		],
@@ -47,12 +45,12 @@
 			"view/item/context": [
 				{
 					"command": "spotifymlh.track.play",
-					"when": "view == spotify-history",
+					"when": "viewItem == track",
 					"group": "inline"
 				},
 				{
 					"command": "spotifymlh.track.queue",
-					"when": "view == spotify-history",
+					"when": "viewItem == track",
 					"group": "inline"
 				}
 			],

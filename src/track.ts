@@ -14,6 +14,7 @@ export default class Track extends vscode.TreeItem {
         public readonly data: any
     ) {
         super(data.name);
+        this.contextValue = 'track';
         this.name = data.name;
         this.artists = data.artists;
         this.uri = data.uri;
