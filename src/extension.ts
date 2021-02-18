@@ -20,8 +20,8 @@ export function activate(context: vscode.ExtensionContext) {
 		clientId,
 		clientSecret
 	});
-
 	spotifyAuthentication(spotify);
+
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.play", () => {
 		//logic for play on spotify goes here
@@ -35,11 +35,11 @@ export function activate(context: vscode.ExtensionContext) {
 
 	vscode.window.registerTreeDataProvider('spotify-recent', new RecentProvider(spotify));
 	vscode.window.registerTreeDataProvider('spotify-playlists', new PlaylistsProvider(spotify));
+	
 }
 
 // this method is called when your extension is deactivated
 export function deactivate() {}
-
 
 function spotifyAuthentication(spotify: typeof SpotifyWebApi) {
 	const state = crypto.randomBytes(8).toString('base64');
@@ -77,14 +77,11 @@ function spotifyAuthentication(spotify: typeof SpotifyWebApi) {
 					vscode.window.showErrorMessage(`Error exchanging authorization code for access token: ${err}`);
 				}
 			);
-			
 			res.send('You may now close this tab.');
 			vscode.window.showInformationMessage("Successfully authenticated with Spotify.");
 			server.close();
 		}
 	});
-
-
 	server = app.listen(PORT);
 	vscode.env.openExternal(authUrl);
 }
