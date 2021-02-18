@@ -16,6 +16,11 @@
 	"contributes": {
 		"commands": [
 			{
+				"command": "spotifymlh.history.newer",
+				"title": "Load newer tracks",
+				"icon": "$(refresh)"
+			},
+			{
 				"command": "spotifymlh.play",
 				"category": "Spotify",
 				"title": "Play"
@@ -24,8 +29,45 @@
 				"command": "spotifymlh.pause",
 				"category": "Spotify",
 				"title": "Pause"
+			},
+			{
+				"command": "spotifymlh.track.play",
+				"title": "Play",
+				"icon": "$(play)"
+			},
+			{
+				"command": "spotifymlh.track.queue",
+				"title": "Add to Queue",
+				"icon": "$(add)"
 			}
 		],
+		"menus": {
+			"commandPalette": [
+				{
+					"command": "spotifymlh.history.newer",
+					"when": "false"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "spotifymlh.track.play",
+					"when": "viewItem == track",
+					"group": "inline"
+				},
+				{
+					"command": "spotifymlh.track.queue",
+					"when": "viewItem == track",
+					"group": "inline"
+				}
+			],
+			"view/title": [
+				{
+					"command": "spotifymlh.history.newer",
+					"when": "view == spotify-history",
+					"group": "navigation"
+				}
+			]
+		},
 		"views": {
 			"spotify": [
 				{
@@ -41,8 +83,8 @@
 					"visibility": "collapsed"
 				},
 				{
-					"id": "spotify-recent",
-					"name": "Recently Played",
+					"id": "spotify-history",
+					"name": "History",
 					"icon": "media/icon.svg",
 					"visibility": "collapsed"
 				},
@@ -101,6 +143,7 @@
 		"@types/glob": "^7.1.3",
 		"@types/mocha": "^8.0.4",
 		"@types/node": "^12.11.7",
+		"@types/spotify-api": "0.0.7",
 		"@types/spotify-web-api-node": "^5.0.0",
 		"@types/vscode": "^1.53.0",
 		"@typescript-eslint/eslint-plugin": "^4.14.1",
