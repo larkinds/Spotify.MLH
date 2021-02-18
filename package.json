@@ -71,22 +71,8 @@
 		"views": {
 			"spotify": [
 				{
-					"id": "spotify-queue",
-					"name": "Queue",
-					"icon": "media/icon.svg",
-					"visibility": "collapsed"
-				},
-				{
-					"id": "spotify-personalized-playlists",
-					"name": "Made For You",
-					"icon": "media/icon.svg",
-					"visibility": "collapsed"
-				},
-				{
 					"id": "spotify-history",
 					"name": "History",
-					"id": "spotify-recent",
-					"name": "Recently Played",
 					"icon": "media/icon.svg",
 					"visibility": "collapsed"
 				},
