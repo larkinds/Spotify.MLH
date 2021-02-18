@@ -10,11 +10,11 @@ export class PlaylistsProvider implements vscode.TreeDataProvider<Playlist> {
     }
 
     const user = await this.spotify.getMe();
-
-    const playlists = await this.spotify.getUserPlaylists(user.id);
-    if (playlists.body) {
+    try {
+      const playlists = await this.spotify.getUserPlaylists(user.id);
       return playlists.body.items.map((playlist: any) => new Playlist(playlist.name));
-    } else {
+    } catch (err: any) {
+      vscode.window.showErrorMessage(err);
       return [];
     }
   }
