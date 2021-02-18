@@ -85,6 +85,8 @@
 				{
 					"id": "spotify-history",
 					"name": "History",
+					"id": "spotify-recent",
+					"name": "Recently Played",
 					"icon": "media/icon.svg",
 					"visibility": "collapsed"
 				},
