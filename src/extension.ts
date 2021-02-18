@@ -1,8 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as crypto from 'crypto';
-import { application } from 'express';
-import { access } from 'fs';
 import * as vscode from 'vscode';
 const express = require('express');
 const SpotifyWebApi = require('spotify-web-api-node');
@@ -25,8 +23,6 @@ export function activate(context: vscode.ExtensionContext) {
 
 	spotifyAuthentication(spotify);
 
-	// console.log(spotify.getPlaylists('me'));
-
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.play", () => {
 		//logic for play on spotify goes here
 	}));
@@ -44,8 +40,6 @@ export function activate(context: vscode.ExtensionContext) {
 // this method is called when your extension is deactivated
 export function deactivate() {}
 
-//do I need to convert this from JSON?
-let accessToken;
 
 function spotifyAuthentication(spotify: typeof SpotifyWebApi) {
 	const state = crypto.randomBytes(8).toString('base64');
@@ -60,7 +54,7 @@ function spotifyAuthentication(spotify: typeof SpotifyWebApi) {
 	
 	const app = express();
 	let server = null;
-	app.get(PATH, (req, res, next) => {
+	app.get(PATH, (req, res) => {
 		if (req.query.error) {
 			vscode.window.showErrorMessage(req.query.error);
 			// server.close();
@@ -76,7 +70,6 @@ function spotifyAuthentication(spotify: typeof SpotifyWebApi) {
 			code = req.query.code;
 			spotify.authorizationCodeGrant(code).then(
 				data => {
-					accessToken = data.body['access_token'];
 					spotify.setAccessToken(data.body['access_token']);
     				spotify.setRefreshToken(data.body['refresh_token']);
 				},

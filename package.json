@@ -10,9 +10,7 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onStartupFinished",
-		"onCommand:Spotify.Pause",
-		"onCommand:Spotify.Play"
+		"onStartupFinished"
 	],
 	"main": "./out/extension.js",
 	"contributes": {

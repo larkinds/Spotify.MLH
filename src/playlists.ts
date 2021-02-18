@@ -1,37 +1,32 @@
 import * as vscode from 'vscode';
-
-
+import SpotifyWebApi = require('spotify-web-api-node');
 
 export class PlaylistsProvider implements vscode.TreeDataProvider<Playlist> {
-  constructor(private spotify: any) {}
+  constructor(private spotify: SpotifyWebApi) {}
 
-
-  getChildren(element?: Playlist): Thenable<Playlist[]> {
+  async getChildren(element?: Playlist): Promise<Playlist[]> {
     if (element) {
       return Promise.resolve([]);
     }
 
-    const user = this.spotify.getMe();
+    const user = await this.spotify.getMe();
 
-    return Promise.resolve(this.spotify.getUserPlaylists(user.id)
-    .then((data) => {
-      return Promise.resolve(data.body.items.map((playlist: any) => new Playlist(playlist.name)));
-    },function(err) {
-      console.log('Something went wrong!', err);
-    })
-  );
+    const playlists = await this.spotify.getUserPlaylists(user.id);
+    if (playlists.body) {
+      return playlists.body.items.map((playlist: any) => new Playlist(playlist.name));
+    } else {
+      return [];
+    }
   }
 
   getTreeItem(element: Playlist): vscode.TreeItem {
     return element;
   }
-
 }
 
 export class Playlist extends vscode.TreeItem {
   constructor (public readonly name: string) {
     super(name);
     this.description = name;
-    this.tooltip = new vscode.MarkdownString(`name`);
   }
 }
