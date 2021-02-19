@@ -1,11 +1,13 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as crypto from 'crypto';
+import express = require('express');
+import { Server } from 'http';
+import SpotifyWebApi = require('spotify-web-api-node');
 import * as vscode from 'vscode';
-const express = require('express');
-const SpotifyWebApi = require('spotify-web-api-node');
-import { RecentProvider } from './recent';
+import { HistoryProvider } from './history';
 import { clientId, clientSecret } from './secrets';
+import Track from './track';
 
 import { renderStatusBar } from './statusBar'
 
@@ -18,8 +20,8 @@ const PORT = 8350;
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-
-	let spotify = new SpotifyWebApi({
+  
+	let spotify: SpotifyWebApi = new SpotifyWebApi({
 		redirectUri: `http://localhost:${PORT}${PATH}`,
 		clientId,
 		clientSecret
@@ -29,6 +31,9 @@ export function activate(context: vscode.ExtensionContext) {
     // Initialise status bar stuff
     renderStatusBar(context)
 
+
+	const historyProvider = new HistoryProvider(spotify, context);
+	vscode.window.registerTreeDataProvider('spotify-history', historyProvider);
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.play", () => {
         vscode.window.showInformationMessage('Attempting to play...');
@@ -55,12 +60,21 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 
 	vscode.window.registerTreeDataProvider('spotify-recent', new RecentProvider(spotify));
+	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.track.play", (track: Track) => {
+		// Spotify Web API doesn't currently have a way to start playback fresh from a track, so this is a hack
+		spotify.addToQueue(track.uri)
+			.then(() => spotify.skipToNext());
+	}));
+	
+	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.track.queue", (track: Track) => {
+		spotify.addToQueue(track.uri);
+	}));
 }
 
 // this method is called when your extension is deactivated
 export function deactivate() {}
 
-function spotifyAuthentication(spotify: typeof SpotifyWebApi) {
+function spotifyAuthentication(spotify: SpotifyWebApi) {
 	const state = crypto.randomBytes(8).toString('base64');
 	const authUrl = spotify.createAuthorizeURL([
 		'user-library-modify',
@@ -72,10 +86,10 @@ function spotifyAuthentication(spotify: typeof SpotifyWebApi) {
 	let code = null;
 	
 	const app = express();
-	let server = null;
+	let server: Server;
 	app.get(PATH, (req, res) => {
 		if (req.query.error) {
-			vscode.window.showErrorMessage(req.query.error);
+			vscode.window.showErrorMessage(req.query.error.toString());
 			// server.close();
 		} else if (!req.query.code) {
 			vscode.window.showErrorMessage("Spotify did not successfully authenticate (missing 'code' property in response).");
@@ -86,7 +100,7 @@ function spotifyAuthentication(spotify: typeof SpotifyWebApi) {
 			res.send('Possible CSRF attack: received different response state from request state.');
 			// server.close();
 		} else {
-			code = req.query.code;
+			code = req.query.code.toString();
 			spotify.authorizationCodeGrant(code).then(
 				data => {
 					spotify.setAccessToken(data.body['access_token']);
@@ -102,5 +116,5 @@ function spotifyAuthentication(spotify: typeof SpotifyWebApi) {
 		}
 	});
 	server = app.listen(PORT);
-	vscode.env.openExternal(authUrl);
+	vscode.env.openExternal(vscode.Uri.parse(authUrl));
 }
