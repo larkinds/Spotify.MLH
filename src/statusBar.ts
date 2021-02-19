@@ -1,6 +1,10 @@
 import * as vscode from "vscode";
 
 const data = {
+    previousItem: {
+        command: "spotifymlh.previous",
+        text: "$(triangle-left)"
+    },
     pauseItem: {
         command: "spotifymlh.pause",
         text: "$(debug-pause)",
@@ -9,10 +13,14 @@ const data = {
         command: "spotifymlh.play",
         text: "$(debug-start)",
     },
+    nextItem: {
+        command: "spotifymlh.next",
+        text: "$(triangle-right)"
+    }
 };
 
 
-export function init(context){
+export function renderStatusBar(context){
     for (const [key, value] of Object.entries(data)) {
     
         let temp = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
@@ -21,6 +29,7 @@ export function init(context){
         context.subscriptions.push(temp);
     
         temp.text = value.text;
+        
         temp.show()
     }
 }

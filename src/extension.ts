@@ -7,7 +7,7 @@ const SpotifyWebApi = require('spotify-web-api-node');
 import { RecentProvider } from './recent';
 import { clientId, clientSecret } from './secrets';
 
-import {init} from './statusBar'
+import { renderStatusBar } from './statusBar'
 
 // Auth config
 const PATH = '/spotify-callback';
@@ -27,7 +27,7 @@ export function activate(context: vscode.ExtensionContext) {
 	spotifyAuthentication(spotify);
 
     // Initialise status bar stuff
-    init(context)
+    renderStatusBar(context)
 
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.play", () => {
@@ -40,6 +40,18 @@ export function activate(context: vscode.ExtensionContext) {
 		// TODO: handle errors etc., see documentation
 		vscode.window.showInformationMessage('Attempting to pause...');
 		spotify.pause();
+	}));
+
+    context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.previous", () => {
+		// TODO: handle errors etc., see documentation
+		vscode.window.showInformationMessage('Playing the previous song...');
+		spotify.skipToPrevious();
+	}));
+
+    context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.next", () => {
+		// TODO: handle errors etc., see documentation
+		vscode.window.showInformationMessage('Playing the next song...');
+		spotify.skipToNext();
 	}));
 
 	vscode.window.registerTreeDataProvider('spotify-recent', new RecentProvider(spotify));
