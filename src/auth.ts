@@ -7,7 +7,11 @@ const NAME = 'spotifymlh'; // From package.json
 const PUBLISHER = 'goofies'; // From package.json
 const PATH = '/authorized';
 
-/** Callback URI that opens VS Code after user authorization */
+/** Callback URI that opens VS Code after user authorization.
+ * 
+ * Be sure to add this URI to the list of allowed callbacks in the
+ * {@link https://developer.spotify.com/dashboard/applications Spotify for Developers Dashboard}.
+ */
 export const redirectUri = `${vscode.env.uriScheme}://${PUBLISHER}.${NAME}${PATH}`;
 
 export class SpotifyCallbackHandler implements vscode.UriHandler {
