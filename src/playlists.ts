@@ -2,18 +2,6 @@ import * as vscode from 'vscode';
 import SpotifyWebApi = require('spotify-web-api-node');
 import Track from './track';
 
-//import correct type definitions
-
-//create array of tracks:
-//loop through track info using .getPlaylistTracks (map)
-//create new track and assign to array of tracks
-
-
-//options: create playlist with name, id & empty track array
-//target each playlist by id
-//for each playlist, push each track into the track[] in a separate thing
-//then return playlist after track[] is full
-
 //display only name of playlist - use getTreeItem && loadTracks function
 
 //turn name into dropdown that displays tracks - register a command with an action?
@@ -30,10 +18,7 @@ export class PlaylistsProvider implements vscode.TreeDataProvider<Playlist> {
     const user = await this.spotify.getMe();
     try {
       const playlists = await this.spotify.getUserPlaylists(user.id);
-      return playlists.body.items.map((playlist: any) => new Playlist(playlist.name, (playlist.id) => {
-        //implemement
-        return []
-      } ));
+      return playlists.body.items.map((playlist: any) => new Playlist(playlist, this.spotify));
     } catch (err: any) {
       vscode.window.showErrorMessage(err);
       return [];
@@ -50,8 +35,21 @@ export class PlaylistsProvider implements vscode.TreeDataProvider<Playlist> {
 }
 
 export class Playlist extends vscode.TreeItem {
-  constructor (public readonly name: string, public readonly id: string, public readonly tracks: Track[]) {
-    super(name);
-    this.description = name;
+  name: string;
+  id: string;
+  tracks: Promise <Track[]>;
+
+  constructor (public readonly data: any, private spotify: SpotifyWebApi) {
+    super(data.name);
+    this.name = data.name;
+    this.id = data.id;
+    this.tracks = this.getPlaylistTracks(data.id, spotify);
+
+    this.description = data.name;
+  }
+  
+  async getPlaylistTracks(id: string, spotify: SpotifyWebApi) {
+    let tracksObj = await spotify.getPlaylistTracks(id);
+    return tracksObj.body.items.map((data: any) => new Track(data));
   }
 }
