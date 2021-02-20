@@ -2,8 +2,6 @@ import * as vscode from 'vscode';
 import SpotifyWebApi = require('spotify-web-api-node');
 import Track from './track';
 
-//display only name of playlist - use getTreeItem && loadTracks function
-
 //turn name into dropdown that displays tracks - register a command with an action?
 
 export class PlaylistsProvider implements vscode.TreeDataProvider<Playlist> {
