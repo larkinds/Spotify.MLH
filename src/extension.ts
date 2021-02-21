@@ -5,7 +5,6 @@ import * as vscode from 'vscode';
 import express = require('express');
 import { Server } from 'http';
 import SpotifyWebApi = require('spotify-web-api-node');
-import { RecentProvider } from './recent';
 import {PlaylistsProvider} from './playlists';
 import { HistoryProvider } from './history';
 import { clientId, clientSecret } from './secrets';
@@ -27,7 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const historyProvider = new HistoryProvider(spotify, context);
 	vscode.window.registerTreeDataProvider('spotify-history', historyProvider);
-	vscode.window.registerTreeDataProvider('spotify-recent', new RecentProvider(spotify));
+	vscode.window.registerTreeDataProvider('spotify-history', new HistoryProvider(spotify, context));
 	vscode.window.registerTreeDataProvider('spotify-playlists', new PlaylistsProvider(spotify));
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.play", () => {
