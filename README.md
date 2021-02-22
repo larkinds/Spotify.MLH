@@ -6,7 +6,7 @@ This is the README for your extension "spotifymlh". After writing up a brief des
 1. Sign up for a Spotify account (a free account is ok for development, but Premium is required for testing)
 1. Log in to [Spotify for Developers](https://developer.spotify.com/dashboard/)
 1. Create an app
-1. Open the settings for your app and add `http://localhost:8350/spotify-callback` as a redirect URI
+1. Open the settings for your app and add `vscode://goofies.spotifymlh/authorized` as a redirect URI
 1. Clone the repository
    ```shell
    git clone git@github.com:larkinds/Spotify.MLH.git
