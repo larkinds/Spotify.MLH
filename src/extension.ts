@@ -31,21 +31,21 @@ export function activate(context: vscode.ExtensionContext) {
 	const historyProvider = new HistoryProvider(spotify, context);
 	vscode.window.registerTreeDataProvider('spotify-history', historyProvider);
 
-	//style difference from above
-	const playlistProvider = new PlaylistsProvider(spotify);
 	const playlistView = vscode.window.createTreeView('spotify-playlists', {
-		treeDataProvider: playlistProvider,
+		treeDataProvider: new PlaylistsProvider(spotify),
 	});
 
-	playlistView.onDidExpandElement((el) => {
-		vscode.window.showInformationMessage("expanded");
-		el.element.state = 2;
-	});
+	// playlistView.onDidExpandElement((el) => {
+	// 	const state = el.element.collapsibleState;
+	// 	vscode.window.showInformationMessage(`expanded: ${state}`);
+	// 	el.element.collapsibleState = 2;
+	// });
 
-	playlistView.onDidCollapseElement((el) => {
-		vscode.window.showInformationMessage("collapsed");
-		el.element.state = 1;
-	});
+	// playlistView.onDidCollapseElement((el) => {
+	// 	const state = el.element.collapsibleState;
+	// 	vscode.window.showInformationMessage(`collapsed: ${state}`);
+	// 	el.element.collapsibleState = 1;
+	// });
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.play", () => {
         vscode.window.showInformationMessage('Attempting to play...');
@@ -79,11 +79,6 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.track.queue", (track: Track) => {
 		spotify.addToQueue(track.uri);
 	}));
-
-	// context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.playlist.showTracks", (playlist: Playlist) => {
-	// 	vscode.window.showInformationMessage("meow");
-	// 	vscode.window.registerTreeDataProvider`spotify-${playlist}`, new PlaylistTracks(spotify));
-	// }));
 }
 
 // this method is called when your extension is deactivated
