@@ -4,7 +4,7 @@ import SpotifyWebApi = require('spotify-web-api-node');
 import * as vscode from 'vscode';
 import { redirectUri, openAuthWindow, SpotifyCallbackHandler } from './auth';
 import { HistoryProvider } from './history';
-import { PlaylistsProvider } from './playlists';
+import { Playlist, PlaylistsProvider } from './playlists';
 import { clientId, clientSecret } from './secrets';
 import Track from './track';
 import { renderStatusBar } from './statusBar';
@@ -31,12 +31,17 @@ export function activate(context: vscode.ExtensionContext) {
 	const historyProvider = new HistoryProvider(spotify, context);
 	vscode.window.registerTreeDataProvider('spotify-history', historyProvider);
 
-	const playlistView = vscode.window.createTreeView('spotify-playlists', {
-		treeDataProvider: new PlaylistsProvider(spotify),
-	});
+
+	const playlistProvider = new PlaylistsProvider(spotify);
+	vscode.window.registerTreeDataProvider("spotify-playlists", playlistProvider);
+
+	// const playlistView = vscode.window.createTreeView('spotify-playlists', {
+	// 	treeDataProvider: new PlaylistsProvider(spotify),
+	// });
 
 	// playlistView.onDidExpandElement((el) => {
 	// 	const state = el.element.collapsibleState;
+	
 	// 	vscode.window.showInformationMessage(`expanded: ${state}`);
 	// 	el.element.collapsibleState = 2;
 	// });

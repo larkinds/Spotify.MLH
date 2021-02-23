@@ -59,11 +59,6 @@
 					"command": "spotifymlh.track.queue",
 					"when": "viewItem == track",
 					"group": "inline"
-				},
-				{
-					"command": "spotifymlh.playlist.showTracks",
-					"when": "viewItem == playlist",
-					"group": "inline"
 				}
 			],
 			"view/title": [
