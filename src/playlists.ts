@@ -1,52 +1,63 @@
 import * as vscode from 'vscode';
 import SpotifyWebApi = require('spotify-web-api-node');
-import Track from './track';
 
-//display only name of playlist - use getTreeItem && loadTracks function
+export class PlaylistsProvider implements vscode.TreeDataProvider<PlaylistAndTracks> {
+  private playlist: any;
 
-//turn name into dropdown that displays tracks - register a command with an action?
+  constructor(private spotify: SpotifyWebApi) {}
 
-export class PlaylistsProvider implements vscode.TreeDataProvider<Playlist> {
-  private playlists: Playlist[];
-
-  constructor(private spotify: SpotifyWebApi) {
-    this.playlists = [];
-  }
-
-  async getChildren(element?: Playlist): Promise<Playlist[]> {
-    if (element) {
-      return Promise.resolve([]);
+  async getChildren(element?: PlaylistAndTracks): Promise<PlaylistAndTracks[] | undefined> {
+    if (element === undefined) {
+      return this.getPlaylistAndTracks(this.spotify);
     }
-    const user = await this.spotify.getMe();
-    try {
-      const playlists = await this.spotify.getUserPlaylists(user.id);
-      this.playlists = playlists.body.items.map((playlist: any) => new Playlist(playlist, this.spotify));
-      return this.playlists;
-    } catch (err: any) {
-      vscode.window.showErrorMessage(err);
-      return [];
-    }
+    return element.children;
+    
   }
-  getTreeItem(element: Playlist): vscode.TreeItem {
+  async getTreeItem(element: PlaylistAndTracks): Promise<PlaylistAndTracks> {
     return element;
   }
 
+  async getPlaylistAndTracks(spotify: SpotifyWebApi) {
+    try {
+      const user = await this.spotify.getMe();
+      const playlists = await this.spotify.getUserPlaylists(user.body.id);
+      return playlists.body.items.map((playlist: any) => new PlaylistAndTracks(playlist, this.spotify));
+
+      } catch (err: any) {
+      vscode.window.showErrorMessage(err);
+    }
+  }
+
 }
 
-export class Playlist extends vscode.TreeItem {
+
+export class PlaylistAndTracks extends vscode.TreeItem {
   name: string;
-  id: string;
-  tracks: Promise <Track[]>;
-  constructor (public readonly data: any, private spotify: SpotifyWebApi) {
+  artists: any[] | undefined;
+  uri: string | undefined;
+  children: Promise<PlaylistAndTracks[]> | undefined;
+
+  constructor (public readonly data: any, spotify?: SpotifyWebApi) {
     super(data.name);
     this.name = data.name;
-    this.id = data.id;
-    this.tracks = this.getPlaylistTracks(data.id, spotify);
-    this.description = data.name;
+    
+    if (spotify) {
+      this.children = this.getTracks(data.id, spotify);
+      this.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+    } else {
+      this.artists = data.track.artists.map((artist: any) => artist.name).join(', ');
+      this.uri = data.uri;
+      this.children = undefined;
+
+      this.description = `${data.track.name} | ${this.artists}`;
+    }
+
   }
-  
-  async getPlaylistTracks(id: string, spotify: SpotifyWebApi) {
+
+  async getTracks(id: string, spotify: SpotifyWebApi) {
     let tracksObj = await spotify.getPlaylistTracks(id);
-    return tracksObj.body.items.map((data: any) => new Track(data));
+    // vscode.window.showInformationMessage(tracksObj.body.items[0].track.artists[0].name);
+    return tracksObj.body.items.map((data: any) => new PlaylistAndTracks(data));
   }
 }
+
