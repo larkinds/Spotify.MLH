@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import SpotifyWebApi = require('spotify-web-api-node');
 
 export class PlaylistsProvider implements vscode.TreeDataProvider<PlaylistAndTracks> {
-  private playlist: any;
 
   constructor(private spotify: SpotifyWebApi) {}
 
@@ -22,42 +21,48 @@ export class PlaylistsProvider implements vscode.TreeDataProvider<PlaylistAndTra
       const user = await this.spotify.getMe();
       const playlists = await this.spotify.getUserPlaylists(user.body.id);
       return playlists.body.items.map((playlist: any) => new PlaylistAndTracks(playlist, this.spotify));
-
       } catch (err: any) {
       vscode.window.showErrorMessage(err);
     }
   }
-
 }
 
 
 export class PlaylistAndTracks extends vscode.TreeItem {
   name: string;
-  artists: any[] | undefined;
-  uri: string | undefined;
+  artists: string;
+  uri: string;
   children: Promise<PlaylistAndTracks[]> | undefined;
+  parent: PlaylistAndTracks | undefined;
 
-  constructor (public readonly data: any, spotify?: SpotifyWebApi) {
+  constructor (public readonly data: any, spotify?: SpotifyWebApi, parent?: PlaylistAndTracks) {
     super(data.name);
-    this.name = data.name;
     
     if (spotify) {
+      this.name = data.name;
+      this.uri = '';
+      this.artists = '';
       this.children = this.getTracks(data.id, spotify);
+
       this.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+      this.contextValue = 'playlist';
     } else {
+      this.name = data.track.name;
       this.artists = data.track.artists.map((artist: any) => artist.name).join(', ');
-      this.uri = data.uri;
+      this.uri = data.track.uri;
       this.children = undefined;
+      this.parent = parent;
 
       this.description = `${data.track.name} | ${this.artists}`;
+      this.contextValue = 'playlistAndTracks';
     }
 
   }
 
   async getTracks(id: string, spotify: SpotifyWebApi) {
     let tracksObj = await spotify.getPlaylistTracks(id);
-    // vscode.window.showInformationMessage(tracksObj.body.items[0].track.artists[0].name);
-    return tracksObj.body.items.map((data: any) => new PlaylistAndTracks(data));
+    //figure out how to point the child back to the parent
+    
+    return tracksObj.body.items.map((data: any) => new PlaylistAndTracks(data, ));
   }
 }
-

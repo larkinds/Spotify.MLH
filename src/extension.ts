@@ -4,7 +4,7 @@ import SpotifyWebApi = require('spotify-web-api-node');
 import * as vscode from 'vscode';
 import { redirectUri, openAuthWindow, SpotifyCallbackHandler } from './auth';
 import { HistoryProvider } from './history';
-import { PlaylistsProvider } from './playlists';
+import { PlaylistAndTracks, PlaylistsProvider } from './playlists';
 import { clientId, clientSecret } from './secrets';
 import Track from './track';
 import { renderStatusBar } from './statusBar';
@@ -35,23 +35,6 @@ export function activate(context: vscode.ExtensionContext) {
 	const playlistProvider = new PlaylistsProvider(spotify);
 	vscode.window.registerTreeDataProvider("spotify-playlists", playlistProvider);
 
-	// const playlistView = vscode.window.createTreeView('spotify-playlists', {
-	// 	treeDataProvider: new PlaylistsProvider(spotify),
-	// });
-
-	
-	// playlistView.onDidExpandElement((el) => {
-	// 	const state = el.element.collapsibleState;
-	
-	// 	vscode.window.showInformationMessage(`expanded: ${state}`);
-	// 	el.element.collapsibleState = 2;
-	// });
-
-	// playlistView.onDidCollapseElement((el) => {
-	// 	const state = el.element.collapsibleState;
-	// 	vscode.window.showInformationMessage(`collapsed: ${state}`);
-	// 	el.element.collapsibleState = 1;
-	// });
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.play", () => {
         vscode.window.showInformationMessage('Attempting to play...');
@@ -81,10 +64,20 @@ export function activate(context: vscode.ExtensionContext) {
 		spotify.addToQueue(track.uri)
 			.then(() => spotify.skipToNext());
 	}));
-	
+
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.track.queue", (track: Track) => {
 		spotify.addToQueue(track.uri);
 	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.playlisttrack.play", (playlistAndTracks: PlaylistAndTracks) => {
+		spotify.addToQueue(playlistAndTracks.uri)
+		.then(() => spotify.skipToNext());
+	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.playlisttrack.queue", (playlistAndTracks: PlaylistAndTracks) => {
+		spotify.addToQueue(playlistAndTracks.uri);
+	}));
+	
 }
 
 // this method is called when your extension is deactivated

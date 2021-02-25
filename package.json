@@ -40,6 +40,21 @@
 				"command": "spotifymlh.track.queue",
 				"title": "Add to Queue",
 				"icon": "$(add)"
+			},
+			{
+				"command": "spotifymlh.playlisttrack.play",
+				"title": "Play",
+				"icon": "$(play)"
+			},
+			{
+				"command": "spotifymlh.playlisttrack.queue",
+				"title": "Add to Queue",
+				"icon": "$(add)"
+			},
+			{
+				"command": "spotifymlh.playlist.play",
+				"title": "Play",
+				"icon": "$(play)"
 			}
 		],
 		"menus": {
@@ -58,6 +73,21 @@
 				{
 					"command": "spotifymlh.track.queue",
 					"when": "viewItem == track",
+					"group": "inline"
+				},
+				{
+					"command": "spotifymlh.playlisttrack.play",
+					"when": "viewItem == playlistAndTracks",
+					"group": "inline"
+				},
+				{
+					"command": "spotifymlh.playlisttrack.queue",
+					"when": "viewItem == playlistAndTracks",
+					"group": "inline"
+				},
+				{
+					"command": "spotifymlh.playlist.play",
+					"when": "viewItem == playlist",
 					"group": "inline"
 				}
 			],
