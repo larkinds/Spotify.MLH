@@ -6,7 +6,7 @@ export class PlaylistsProvider implements vscode.TreeDataProvider<PlaylistAndTra
   
   constructor(private spotify: SpotifyWebApi) {}
 
-  async getChildren(element?: PlaylistAndTracks): Promise<PlaylistAndTracks[]> {
+  async getChildren(element?: PlaylistAndTracks): Promise<PlaylistAndTracks[] | undefined> {
     if (element === undefined) {
       return this.getPlaylistAndTracks(this.spotify);
     }
