@@ -21,6 +21,26 @@ export function activate(context: vscode.ExtensionContext) {
 		clientSecret
 	});
 
+	// Set up command to bootstrap playback, called in openAuthWindow()
+	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.bootstrap", () => {
+		spotify.getMyDevices()
+		.then(
+			data => {
+				if (data.body.devices.length < 1) {
+					vscode.window.showInformationMessage("No Spotify clients are online. Open Spotify and try again. If you already have a Spotify device running, try playing a track directly on it to register it with the Spotify API.");
+					return;
+				}
+
+				let device = data.body.devices[0];
+				if (!device.is_active) {
+					return spotify.transferMyPlayback([device.id ?? ""])
+					.then(() => vscode.window.showInformationMessage(`Successfully connected to ${device.name}.`) );
+				}
+			}
+		)
+		.catch(error => vscode.window.showErrorMessage(error.message));
+	}));
+
 	// Set up authorization callback handler and kick off the process
 	context.subscriptions.push(vscode.window.registerUriHandler(new SpotifyCallbackHandler(spotify, openAuthWindow(spotify))));
 	
