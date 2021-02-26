@@ -21,7 +21,7 @@ export class ArtistsProvider implements vscode.TreeDataProvider<ArtistsAndTracks
       const artists = await this.spotify.getFollowedArtists();
       return artists.body.artists.items.map((data) => new ArtistsAndTracks(data, this.spotify));
       } catch (err: any) {
-      vscode.window.showErrorMessage(err);
+      vscode.window.showErrorMessage(err.message);
     }
   }
 }

@@ -66,63 +66,68 @@ export function activate(context: vscode.ExtensionContext) {
   
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.play", () => {
-        vscode.window.showInformationMessage('Attempting to play...');
-		spotify.play();
+		spotify.play()
+			.catch(error => vscode.window.showErrorMessage(error.message));
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.pause", () => {
-		// TODO: handle errors etc., see documentation
-		vscode.window.showInformationMessage('Attempting to pause...');
-		spotify.pause();
+		spotify.pause()
+			.catch(error => vscode.window.showErrorMessage(error.message));
 	}));
 
     context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.previous", () => {
-		// TODO: handle errors etc., see documentation
-		vscode.window.showInformationMessage('Playing the previous song...');
-		spotify.skipToPrevious();
+		spotify.skipToPrevious()
+			.catch(error => vscode.window.showErrorMessage(error.message));
 	}));
 
     context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.next", () => {
-		// TODO: handle errors etc., see documentation
-		vscode.window.showInformationMessage('Playing the next song...');
-		spotify.skipToNext();
+		spotify.skipToNext()
+			.catch(error => vscode.window.showErrorMessage(error.message));
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.track.play", (track: Track) => {
 		// Spotify Web API doesn't currently have a way to start playback fresh from a track, so this is a hack
 		spotify.addToQueue(track.uri)
-			.then(() => spotify.skipToNext());
+			.then(() => spotify.skipToNext())
+			.catch(error => vscode.window.showErrorMessage(error.message));
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.track.queue", (track: Track) => {
-		spotify.addToQueue(track.uri);
+		spotify.addToQueue(track.uri)
+			.catch(error => vscode.window.showErrorMessage(error.message));
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.playlisttrack.play", (playlistAndTracks: PlaylistAndTracks) => {
 		spotify.addToQueue(playlistAndTracks.uri)
-		.then(() => spotify.skipToNext());
+			.then(() => spotify.skipToNext())
+			.catch(error => vscode.window.showErrorMessage(error.message));
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.playlisttrack.queue", (playlistAndTracks: PlaylistAndTracks) => {
-		spotify.addToQueue(playlistAndTracks.uri);
+		spotify.addToQueue(playlistAndTracks.uri)
+			.catch(error => vscode.window.showErrorMessage(error.message));
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.albumtrack.play", (albumsAndTracks: AlbumsAndTracks) => {
 		spotify.addToQueue(albumsAndTracks.uri)
-		.then(() => spotify.skipToNext());
+			.then(() => spotify.skipToNext())
+			.catch(error => vscode.window.showErrorMessage(error.message));
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.albumtrack.queue", (albumAndTracks: AlbumsAndTracks) => {
-		spotify.addToQueue(albumAndTracks.uri);
+		spotify.addToQueue(albumAndTracks.uri)
+			.catch(error => vscode.window.showErrorMessage(error.message));
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.artisttrack.play", (artistAndTracks: ArtistsAndTracks) => {
 		spotify.addToQueue(artistAndTracks.uri)
-		.then(() => spotify.skipToNext());
+			.then(() => spotify.skipToNext())
+			.catch(error => vscode.window.showErrorMessage(error.message));
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.artisttrack.queue", (artistAndTracks: ArtistsAndTracks) => {
-		spotify.addToQueue(artistAndTracks.uri);
+		spotify.addToQueue(artistAndTracks.uri)
+			.catch(error => vscode.window.showErrorMessage(error.message));
 	}));
 
 	
