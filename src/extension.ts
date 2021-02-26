@@ -4,6 +4,7 @@ import SpotifyWebApi = require('spotify-web-api-node');
 import * as vscode from 'vscode';
 import { redirectUri, openAuthWindow, SpotifyCallbackHandler } from './auth';
 import { HistoryProvider } from './history';
+import { PlaylistAndTracks, PlaylistsProvider } from './playlists';
 import { LikesProvider } from './likes';
 import { clientId, clientSecret } from './secrets';
 import Track from './track';
@@ -31,10 +32,14 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.window.registerTreeDataProvider('spotify-likes', new LikesProvider(spotify, context));
 	vscode.window.registerTreeDataProvider('spotify-history', new HistoryProvider(spotify, context));
 
+
+	const playlistProvider = new PlaylistsProvider(spotify);
+	vscode.window.registerTreeDataProvider("spotify-playlists", playlistProvider);
+
+
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.play", () => {
         vscode.window.showInformationMessage('Attempting to play...');
 		spotify.play();
-		//logic for play on spotify goes here
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.pause", () => {
@@ -60,10 +65,20 @@ export function activate(context: vscode.ExtensionContext) {
 		spotify.addToQueue(track.uri)
 			.then(() => spotify.skipToNext());
 	}));
-	
+
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.track.queue", (track: Track) => {
 		spotify.addToQueue(track.uri);
 	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.playlisttrack.play", (playlistAndTracks: PlaylistAndTracks) => {
+		spotify.addToQueue(playlistAndTracks.uri)
+		.then(() => spotify.skipToNext());
+	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.playlisttrack.queue", (playlistAndTracks: PlaylistAndTracks) => {
+		spotify.addToQueue(playlistAndTracks.uri);
+	}));
+	
 }
 
 // this method is called when your extension is deactivated

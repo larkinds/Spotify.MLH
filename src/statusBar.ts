@@ -20,6 +20,7 @@ const data = {
 };
 
 
+
 export function renderStatusBar(context: any) {
     for (const [key, value] of Object.entries(data)) {
     
