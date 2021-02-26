@@ -54,7 +54,7 @@ export class PlaylistAndTracks extends vscode.TreeItem {
       this.children = undefined;
       this.parent = parent;
 
-      this.description = `${data.track.name} | ${this.artists}`;
+      this.description = this.artists;
       this.contextValue = 'playlistAndTracks';
     }
 
