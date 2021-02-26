@@ -66,8 +66,9 @@ export class SpotifyCallbackHandler implements vscode.UriHandler {
 export function openAuthWindow(spotify: SpotifyWebApi): string {
 	const state = crypto.randomBytes(8).toString('hex');
 	const authUrl = spotify.createAuthorizeURL([
-		'user-library-modify',
-        'user-library-read',
+		'user-follow-read',
+    'user-library-modify',
+    'user-library-read',
 		'user-modify-playback-state',
 		'user-read-playback-state',
 		'user-read-recently-played'

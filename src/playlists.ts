@@ -33,7 +33,6 @@ export class PlaylistAndTracks extends vscode.TreeItem {
   artists: string;
   uri: string;
   children: Promise<PlaylistAndTracks[]> | undefined;
-  parent: PlaylistAndTracks | undefined;
 
   //constructor takes in spotify if the obj being instantiated is a playlist and no spotify if its a track -- this is how one obj can represent both
   constructor (public readonly data: any, spotify?: SpotifyWebApi, parent?: PlaylistAndTracks) {
@@ -52,7 +51,6 @@ export class PlaylistAndTracks extends vscode.TreeItem {
       this.artists = data.track.artists.map((artist: any) => artist.name).join(', ');
       this.uri = data.track.uri;
       this.children = undefined;
-      this.parent = parent;
 
       this.description = this.artists;
       this.contextValue = 'playlistAndTracks';

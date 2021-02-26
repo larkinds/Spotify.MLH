@@ -70,6 +70,16 @@
 				"command": "spotifymlh.albumtrack.queue",
 				"title": "Add to Queue",
 				"icon": "$(add)"
+			},
+			{
+				"command": "spotifymlh.artisttrack.play",
+				"title": "Play",
+				"icon": "$(play)"
+			},
+			{
+				"command": "spotifymlh.artisttrack.queue",
+				"title": "Add to Queue",
+				"icon": "$(add)"
 			}
 		],
 		"menus": {
@@ -117,6 +127,16 @@
 				{
 					"command": "spotifymlh.albumtrack.queue",
 					"when": "viewItem == albumTrack",
+					"group": "inline"
+				},
+				{
+					"command": "spotifymlh.artisttrack.play",
+					"when": "viewItem == artistTrack",
+					"group": "inline"
+				},
+				{
+					"command": "spotifymlh.albumtrack.queue",
+					"when": "viewItem == artistTrack",
 					"group": "inline"
 				}
 			],
