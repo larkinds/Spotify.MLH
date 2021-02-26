@@ -36,6 +36,7 @@ export class PlaylistAndTracks extends vscode.TreeItem {
   children: Promise<PlaylistAndTracks[]> | undefined;
   parent: PlaylistAndTracks | undefined;
 
+  //constructor takes in spotify if the obj being instantiated is a playlist and no spotify if its a track -- this is how one obj can represent both
   constructor (public readonly data: any, spotify?: SpotifyWebApi, parent?: PlaylistAndTracks) {
     super(data.track.name ?? data.name);
     
