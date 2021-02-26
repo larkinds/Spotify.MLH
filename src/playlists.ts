@@ -2,10 +2,11 @@ import * as vscode from 'vscode';
 import SpotifyWebApi = require('spotify-web-api-node');
 
 export class PlaylistsProvider implements vscode.TreeDataProvider<PlaylistAndTracks> {
-
+  private children: PlaylistAndTracks[] = [];
+  
   constructor(private spotify: SpotifyWebApi) {}
 
-  async getChildren(element?: PlaylistAndTracks): Promise<PlaylistAndTracks[] | undefined> {
+  async getChildren(element?: PlaylistAndTracks): Promise<PlaylistAndTracks[]> {
     if (element === undefined) {
       return this.getPlaylistAndTracks(this.spotify);
     }
