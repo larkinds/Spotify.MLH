@@ -1,6 +1,6 @@
 # spotify.mlh
 
-Spotify.MLH is a lightweight VSCode extension that allows a user to control their spotify player from within their coding environment. Created during a 2 week sprint in the spring 2021 Major League Hacking Externship Fellowship. Each project member worked 20 hours a week on this extension on top of schoolwork or their jobs, respectively.
+Spotify.MLH is a lightweight VSCode extension that allows a user to control their spotify player from within their coding environment. It was created during a 2 week sprint by three fellows in the spring 2021 Major League Hacking Externship Fellowship. Each fellow worked ~20 hours a week on this extension on top of their schoolwork or their jobs, respectively.
 
 ## Development Setup
 1. Sign up for a Spotify account (a free account is ok for development, but Premium is required for testing)
