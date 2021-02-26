@@ -94,6 +94,15 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.albumtrack.queue", (albumAndTracks: AlbumsAndTracks) => {
 		spotify.addToQueue(albumAndTracks.uri);
 	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.artisttrack.play", (artistAndTracks: ArtistsAndTracks) => {
+		spotify.addToQueue(artistAndTracks.uri)
+		.then(() => spotify.skipToNext());
+	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.artisttrack.queue", (artistAndTracks: ArtistsAndTracks) => {
+		spotify.addToQueue(artistAndTracks.uri);
+	}));
 	
 }
 
