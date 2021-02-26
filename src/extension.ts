@@ -5,6 +5,7 @@ import * as vscode from 'vscode';
 import { redirectUri, openAuthWindow, SpotifyCallbackHandler } from './auth';
 import { HistoryProvider } from './history';
 import { PlaylistAndTracks, PlaylistsProvider } from './playlists';
+import { LikesProvider } from './likes';
 import { clientId, clientSecret } from './secrets';
 import Track from './track';
 import { renderStatusBar } from './statusBar';
@@ -28,8 +29,8 @@ export function activate(context: vscode.ExtensionContext) {
     renderStatusBar(context);
 
 
-	const historyProvider = new HistoryProvider(spotify, context);
-	vscode.window.registerTreeDataProvider('spotify-history', historyProvider);
+	vscode.window.registerTreeDataProvider('spotify-likes', new LikesProvider(spotify, context));
+	vscode.window.registerTreeDataProvider('spotify-history', new HistoryProvider(spotify, context));
 
 
 	const playlistProvider = new PlaylistsProvider(spotify);
