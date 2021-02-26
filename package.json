@@ -22,6 +22,11 @@
 				"icon": "$(refresh)"
 			},
 			{
+				"command": "spotifymlh.likes.refresh",
+				"title": "Refresh liked tracks",
+				"icon": "$(refresh)"
+			},
+			{
 				"command": "spotifymlh.play",
 				"category": "Spotify",
 				"title": "Play"
@@ -72,6 +77,10 @@
 				{
 					"command": "spotifymlh.history.newer",
 					"when": "false"
+				},
+				{
+					"command": "spotifymlh.likes.refresh",
+					"when": "false"
 				}
 			],
 			"view/item/context": [
@@ -115,6 +124,11 @@
 				{
 					"command": "spotifymlh.history.newer",
 					"when": "view == spotify-history",
+					"group": "navigation"
+				},
+				{
+					"command": "spotifymlh.likes.refresh",
+					"when": "view == spotify-likes",
 					"group": "navigation"
 				}
 			]
