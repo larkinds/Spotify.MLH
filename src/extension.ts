@@ -78,16 +78,26 @@ export function activate(context: vscode.ExtensionContext) {
 		spotify.addToQueue(track.uri);
 	}));
 
-	context.subscriptions.push(vscode.commands.registerCommand('spotify.playlist.play', async (playlistAndTracks: PlaylistAndTracks) => {
+	context.subscriptions.push(vscode.commands.registerCommand('spotifymlh.playlist.play', async (playlistAndTracks: PlaylistAndTracks) => {
+		vscode.window.showInformationMessage("meow");
+		vscode.window.showInformationMessage(playlistAndTracks.name);
 		let tracks = await playlistAndTracks.children;
+		
 
 		if (tracks !== undefined) {
-			let firstTrackUri = tracks[0].uri;
+			vscode.window.showInformationMessage(tracks[0].name);
+			let firstTrackUri: any = tracks[1].uri;
+			let tracksURI = tracks?.map((track) => track.uri);
+			
+
+			tracks.map((track) => {
+				spotify.addToQueue(track.uri);
+			});
 
 			let currentTrack = await spotify.getMyCurrentPlayingTrack({market: 'US'});
-				
 			if (currentTrack.body.item !== null) {
-				while (currentTrack.body.item?.uri !== firstTrackUri) {
+				vscode.window.showInformationMessage(currentTrack.body.item?.name);
+				while (currentTrack.body.item !== null && tracksURI.includes(currentTrack.body.item.uri)) {
 					spotify.skipToNext();
 					currentTrack = await spotify.getMyCurrentPlayingTrack();
 				}
