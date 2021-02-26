@@ -50,5 +50,5 @@ Welcome to Spotify.MLH. We're proud of this project and enjoyed working together
 
 ### 1.0.0
 
-Initial release of Spotify.MLH!
+2.16.21: Initial release of Spotify.MLH!
 
