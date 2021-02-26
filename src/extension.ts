@@ -4,6 +4,7 @@ import SpotifyWebApi = require('spotify-web-api-node');
 import * as vscode from 'vscode';
 import { redirectUri, openAuthWindow, SpotifyCallbackHandler } from './auth';
 import { HistoryProvider } from './history';
+import { LikesProvider } from './likes';
 import { clientId, clientSecret } from './secrets';
 import Track from './track';
 import { renderStatusBar } from './statusBar';
@@ -27,8 +28,8 @@ export function activate(context: vscode.ExtensionContext) {
     renderStatusBar(context);
 
 
-	const historyProvider = new HistoryProvider(spotify, context);
-	vscode.window.registerTreeDataProvider('spotify-history', historyProvider);
+	vscode.window.registerTreeDataProvider('spotify-likes', new LikesProvider(spotify, context));
+	vscode.window.registerTreeDataProvider('spotify-history', new HistoryProvider(spotify, context));
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.play", () => {
         vscode.window.showInformationMessage('Attempting to play...');
