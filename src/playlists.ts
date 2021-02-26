@@ -64,6 +64,6 @@ export class PlaylistAndTracks extends vscode.TreeItem {
     let tracksObj = await spotify.getPlaylistTracks(id);
     //figure out how to point the child back to the parent
     
-    return tracksObj.body.items.map((data: any) => new PlaylistAndTracks(data, ));
+    return tracksObj.body.items.map((data: any) => new PlaylistAndTracks(data));
   }
 }

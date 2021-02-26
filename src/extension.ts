@@ -5,6 +5,7 @@ import * as vscode from 'vscode';
 import { redirectUri, openAuthWindow, SpotifyCallbackHandler } from './auth';
 import { HistoryProvider } from './history';
 import { PlaylistAndTracks, PlaylistsProvider } from './playlists';
+import { AlbumsAndTracks, AlbumsProvider } from './albums';
 import { LikesProvider } from './likes';
 import { clientId, clientSecret } from './secrets';
 import Track from './track';
@@ -35,6 +36,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const playlistProvider = new PlaylistsProvider(spotify);
 	vscode.window.registerTreeDataProvider("spotify-playlists", playlistProvider);
+
+	const albumProvider = new AlbumsProvider(spotify);
+	vscode.window.registerTreeDataProvider('spotify-albums', albumProvider);
 
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.play", () => {
@@ -77,6 +81,15 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.playlisttrack.queue", (playlistAndTracks: PlaylistAndTracks) => {
 		spotify.addToQueue(playlistAndTracks.uri);
+	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.albumtrack.play", (albumsAndTracks: AlbumsAndTracks) => {
+		spotify.addToQueue(albumsAndTracks.uri)
+		.then(() => spotify.skipToNext());
+	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.albumtrack.queue", (albumAndTracks: AlbumsAndTracks) => {
+		spotify.addToQueue(albumAndTracks.uri);
 	}));
 	
 }
