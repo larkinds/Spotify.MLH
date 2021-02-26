@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import SpotifyWebApi = require('spotify-web-api-node');
 
 export class PlaylistsProvider implements vscode.TreeDataProvider<PlaylistAndTracks> {
-
+  
   constructor(private spotify: SpotifyWebApi) {}
 
   async getChildren(element?: PlaylistAndTracks): Promise<PlaylistAndTracks[] | undefined> {
@@ -22,7 +22,7 @@ export class PlaylistsProvider implements vscode.TreeDataProvider<PlaylistAndTra
       const playlists = await this.spotify.getUserPlaylists(user.body.id);
       return playlists.body.items.map((playlist: any) => new PlaylistAndTracks(playlist, this.spotify));
       } catch (err: any) {
-      vscode.window.showErrorMessage(err);
+      vscode.window.showErrorMessage(err.message);
     }
   }
 }
@@ -34,8 +34,9 @@ export class PlaylistAndTracks extends vscode.TreeItem {
   uri: string;
   children: Promise<PlaylistAndTracks[]> | undefined;
 
+  //constructor takes in spotify if the obj being instantiated is a playlist and no spotify if its a track -- this is how one obj can represent both
   constructor (public readonly data: any, spotify?: SpotifyWebApi, parent?: PlaylistAndTracks) {
-    super(data.name);
+    super(data.name ?? data.track.name);
     
     if (spotify) {
       this.name = data.name;
@@ -51,7 +52,7 @@ export class PlaylistAndTracks extends vscode.TreeItem {
       this.uri = data.track.uri;
       this.children = undefined;
 
-      this.description = `${data.track.name} | ${this.artists}`;
+      this.description = this.artists;
       this.contextValue = 'playlistAndTracks';
     }
 

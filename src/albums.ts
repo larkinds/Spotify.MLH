@@ -35,7 +35,7 @@ export class AlbumsAndTracks extends vscode.TreeItem {
   parent: AlbumsAndTracks | undefined;
 
   constructor (public readonly data: any, spotify?: SpotifyWebApi, parent?: AlbumsAndTracks) {
-    super(data);
+    super(data.name ?? data.album.name);
 
     if (spotify) {
       this.name = data.album.name;
@@ -53,7 +53,7 @@ export class AlbumsAndTracks extends vscode.TreeItem {
       this.children = undefined;
       this.parent = parent;
 
-      this.description = `${data.name} | ${this.artists}`;
+      this.description = this.artists;
       this.contextValue = 'albumTrack';
     }
 
