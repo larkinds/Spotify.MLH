@@ -21,7 +21,7 @@ export class AlbumsProvider implements vscode.TreeDataProvider<AlbumsAndTracks> 
       const albums = await this.spotify.getMySavedAlbums();
       return albums.body.items.map((data) => new AlbumsAndTracks(data, this.spotify));
       } catch (err: any) {
-      vscode.window.showErrorMessage(err);
+      vscode.window.showErrorMessage(err.message);
     }
   }
 }
