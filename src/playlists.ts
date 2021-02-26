@@ -33,7 +33,6 @@ export class PlaylistAndTracks extends vscode.TreeItem {
   artists: string;
   uri: string;
   children: Promise<PlaylistAndTracks[]> | undefined;
-  parent: PlaylistAndTracks | undefined;
 
   constructor (public readonly data: any, spotify?: SpotifyWebApi, parent?: PlaylistAndTracks) {
     super(data.name);
@@ -51,7 +50,6 @@ export class PlaylistAndTracks extends vscode.TreeItem {
       this.artists = data.track.artists.map((artist: any) => artist.name).join(', ');
       this.uri = data.track.uri;
       this.children = undefined;
-      this.parent = parent;
 
       this.description = `${data.track.name} | ${this.artists}`;
       this.contextValue = 'playlistAndTracks';

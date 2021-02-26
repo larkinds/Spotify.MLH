@@ -6,6 +6,7 @@ import { redirectUri, openAuthWindow, SpotifyCallbackHandler } from './auth';
 import { HistoryProvider } from './history';
 import { PlaylistAndTracks, PlaylistsProvider } from './playlists';
 import { AlbumsAndTracks, AlbumsProvider } from './albums';
+import { ArtistsAndTracks, ArtistsProvider } from './artists';
 import { clientId, clientSecret } from './secrets';
 import Track from './track';
 import { renderStatusBar } from './statusBar';
@@ -38,6 +39,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const albumProvider = new AlbumsProvider(spotify);
 	vscode.window.registerTreeDataProvider('spotify-albums', albumProvider);
+
+	const artistProvider = new ArtistsProvider(spotify);
+	vscode.window.registerTreeDataProvider('spotify-artists', artistProvider);
 
 
 	context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.play", () => {

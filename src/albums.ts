@@ -60,7 +60,6 @@ export class AlbumsAndTracks extends vscode.TreeItem {
   }
 
   async getTracks(id: string, spotify: SpotifyWebApi) {
-    // album.tracks.items[0].name
     let tracks = await spotify.getAlbumTracks(id);
     tracks.body.items[0].name;
     return tracks.body.items.map((track: any) => new AlbumsAndTracks(track));
