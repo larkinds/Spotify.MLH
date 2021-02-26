@@ -17,6 +17,10 @@
 	"contributes": {
 		"commands": [
 			{
+				"command": "spotifymlh.bootstrap",
+				"title": "Bootstrap playback"
+			},
+			{
 				"command": "spotifymlh.history.newer",
 				"title": "Load newer tracks",
 				"icon": "$(refresh)"
