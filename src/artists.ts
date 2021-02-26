@@ -33,7 +33,7 @@ export class ArtistsAndTracks extends vscode.TreeItem {
   children: Promise<ArtistsAndTracks[]> | undefined;
 
   constructor (public readonly data: any, spotify?: SpotifyWebApi, parent?: ArtistsAndTracks) {
-    super(data);
+    super(data.name);
 
     if (spotify) {
       this.name = data.name;
