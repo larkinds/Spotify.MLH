@@ -25,7 +25,7 @@ Spotify.MLH is a lightweight VSCode extension that allows a user to control thei
    npm install
    ```
 1. Run the extension by hitting <kbd>F5</kbd> or clicking the `Run Extension` button at the bottom of your screen
-1. Once in the new VsCode window, follow the instructions in the pop-ups to authorize the Spotify.MLH to access your spotify
+1. Once in the new VSCode window, follow the instructions in the pop-ups to authorize the Spotify.MLH to access your spotify
 
 ## Features
 
