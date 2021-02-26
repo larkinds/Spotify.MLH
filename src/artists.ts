@@ -40,15 +40,13 @@ export class ArtistsAndTracks extends vscode.TreeItem {
       this.uri = '';
       this.children = this.getTracks(data.id, spotify);
 
-      this.description = data.name;
       this.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
       this.contextValue = 'artist';
     } else {
       this.name = data.name;
       this.uri = data.uri;
       this.children = undefined;
-
-      this.description = `${data.name}`;
+      
       this.contextValue = 'artistTrack';
     }
 
