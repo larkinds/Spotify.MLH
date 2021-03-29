@@ -49,10 +49,11 @@ export class SpotifyCallbackHandler implements vscode.UriHandler {
             data => {
                 this.spotify.setAccessToken(data.body['access_token']);
                 this.spotify.setRefreshToken(data.body['refresh_token']);
-                vscode.window.showInformationMessage("Successfully authenticated with Spotify.");
+                // Ensure we connect to a device
+                vscode.commands.executeCommand('spotifymlh.bootstrap');
             },
             err => {
-                vscode.window.showErrorMessage(`Error exchanging authorization code for access token: ${err}`);
+                vscode.window.showErrorMessage(`Error exchanging authorization code for access token: ${err.message}`);
             }
         );
     }
@@ -66,7 +67,9 @@ export class SpotifyCallbackHandler implements vscode.UriHandler {
 export function openAuthWindow(spotify: SpotifyWebApi): string {
 	const state = crypto.randomBytes(8).toString('hex');
 	const authUrl = spotify.createAuthorizeURL([
-		'user-library-modify',
+		'user-follow-read',
+    'user-library-modify',
+    'user-library-read',
 		'user-modify-playback-state',
 		'user-read-playback-state',
 		'user-read-recently-played'

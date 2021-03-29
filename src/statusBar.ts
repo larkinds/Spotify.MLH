@@ -20,7 +20,8 @@ const data = {
 };
 
 
-export function renderStatusBar(context){
+
+export function renderStatusBar(context: any) {
     for (const [key, value] of Object.entries(data)) {
     
         let temp = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
@@ -30,6 +31,6 @@ export function renderStatusBar(context){
     
         temp.text = value.text;
         
-        temp.show()
+        temp.show();
     }
 }

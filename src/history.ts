@@ -32,7 +32,7 @@ export class HistoryProvider implements vscode.TreeDataProvider<Track> {
                     this.tracks = data.body.items.map((x: any) => new Track(x.track)).concat(this.tracks);
                     this._onDidChangeTreeData.fire(); // Tell VS Code that the TreeItems have changed
                 },
-                error => vscode.window.showErrorMessage(error)
+                error => vscode.window.showErrorMessage(error.message)
             );
         }));
         context.subscriptions.push(vscode.commands.registerCommand("spotifymlh.history.older", () => {
@@ -46,7 +46,7 @@ export class HistoryProvider implements vscode.TreeDataProvider<Track> {
                     this.tracks.push(...data.body.items.map((x: any) => new Track(x.track)));
                     this._onDidChangeTreeData.fire(); // Tell VS Code that the TreeItems have changed
                 },
-                error => vscode.window.showErrorMessage(error)
+                error => vscode.window.showErrorMessage(error.message)
             );
         }));
     }
@@ -79,7 +79,7 @@ export class HistoryProvider implements vscode.TreeDataProvider<Track> {
                 this.tracks = data.body.items.map((x: any) => new Track(x.track)).concat(this.tracks);
                 this._onDidChangeTreeData.fire(); // Tell VS Code that the TreeItems have changed
             },
-            error => vscode.window.showErrorMessage(error)
+            error => vscode.window.showErrorMessage(error.message)
         ));
     }
 }
